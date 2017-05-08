@@ -1,6 +1,12 @@
 import pandas as pd
+import os.path
+import zipfile
 
 def load_ipps_data():
+    if (os.path.exists(os.path.join("data", "IPPS_Provider_Data.csv")) == False):
+        with zipfile.ZipFile("data/IPPS_Provider_Data.zip","r") as zip_ref:
+            zip_ref.extractall("data")
+
     return pd.read_csv("data/IPPS_Provider_Data.csv")
 
 def get_zipcode_data():

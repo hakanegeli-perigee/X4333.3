@@ -1,4 +1,4 @@
-StateName,StateAbbr,StateFIPS,Division,Region
+State_Name,State_Abbr,State_FIPS,Division,Region
 Connecticut,CT,9,New England,NORTHEAST
 Maine,ME,23,New England,NORTHEAST
 Massachusetts,MA,25,New England,NORTHEAST

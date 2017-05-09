@@ -4,6 +4,25 @@ import os.path
 
 class IppsData:
 
+
+    """
+    DESCRIPTION
+    
+    This object contains the Prospective Payment System Provider Summary (IPPS) data.
+    
+    
+    USAGE
+    
+    from ipps import IppsData
+    
+    Call the .load() method to load the data once
+    ipps_data = IppsData()
+    ipps_data.load()
+    
+    Call the .data property to access the loaded DataFrame
+    ipps_data.data
+    
+    """
     def __init__(self):
         # in case if we want to store the data in a separate directory
         self._datafile_dir = ""
@@ -11,25 +30,33 @@ class IppsData:
         # internal property which holds the IPPS DataFrame
         self._data = None
 
-    def get_data(self):
+    @property
+    def data(self):
         """
-        This method loads the IPPS data from a CSV file and adds the Region and Urban columns
-        
+        This property returns the loaded the IPPS DataFrame
+
         :return: DataFrame containing IPPS data
         """
+        return self._data
 
+    def load(self):
+        """
+        This method loads the IPPS data from a CSV file and adds the Region and Urban columns.
+        Loaded DataFrame can be accessed using the .data property
+        
+        :return: None
+        """
         ipps_data = self.__load_ipps_data()
         zipcode_data = self.__get_zip_code_data()
-        self._data = self.add_zip_code_data_to_ipps(ipps_data, zipcode_data)
-        return self._data
+        self._data = self.__add_zip_code_data_to_ipps(ipps_data, zipcode_data)
 
     def __load_ipps_data(self):
         """
-        This method reads the IPPS data from a CSV file
+        This private method reads the IPPS data from a CSV file
         
         :return: Raw IPPS DataFrame
         """
-
+        # check if the provider data file exists, raise an expection if the file is not found
         if not os.path.exists(os.path.join(self._datafile_dir, "IPPS_Provider_Data.csv")):
             raise Exception("Missing IPPS_Provider_Data.csv file!")
 
@@ -46,11 +73,10 @@ class IppsData:
 
     def __get_zip_code_data(self):
         """
-        This method reads zip code and MSA and the US Region data from a CSV file and creates a ZipCode DataFrame 
+        This private method reads zip code and MSA and the US Region data from a CSV file and creates a Zip Code DataFrame 
         
-        :return: ZipCode DataFrame 
+        :return: Zip Code DataFrame 
         """
-
         # 5 digit zip code, city, state, zip, Metropolitan Statistical Area (MSA), latitude, longitude, etc.
         zip_codes = pd.read_csv(os.path.join(self._datafile_dir, "5DigitZipcodes.csv"))
 
@@ -84,14 +110,13 @@ class IppsData:
 
         return unique_zip_codes
 
-    def add_zip_code_data_to_ipps(self, ipps, zipcode):
+    def __add_zip_code_data_to_ipps(self, ipps, zipcode):
         """
-        This method merges IPPS DataFrame and the ZipCode DataFrame into a single DataFrame
+        This private method merges IPPS and the Zip Code DataFrames into a single DataFrame
         
-        :param ipps: IPPS DataFrame 
-        :param zipcode: ZipCode DataFrame
+        :param ipps: IPPS DataFrame which contains the DRG Codes, Provider and Payment data
+        :param zipcode: Zip Code DataFrame which contains the zip codes, regions and MSA information
         :return: Merged IPPS DataFrame
         """
-
         # we will join the 'Provider_Zip_Code' column from the ipps and the 'Zip_Code' field from the zipcode
         return pd.merge(ipps, zipcode, left_on='Provider_Zip_Code', right_on='Zip_Code', how='left')

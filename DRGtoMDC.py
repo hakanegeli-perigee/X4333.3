@@ -65,18 +65,20 @@ class DRGtoMDC:
         mdc = pd.read_csv(os.path.join(self._datafile_dir, "DRGtoMDC.csv"),
                           header=0,
                           names=headers)
-        """the MDCs map close to the index (mdc starts at 0; index starts at 0)"""
+        return mdc[['MDC', 'MS-DRG(low)', 'MS-DRG(high)']]
+        # """the MDCs map close to the index (mdc starts at 0; index starts at 0)"""
+        #
+        # """create a drg to mdc mapping"""
+        # drg_low = mdc['MS-DRG(low)']
+        # drg_high = mdc['MS-DRG(high)']
+        # mdc_codes = mdc['MDC']
+        # # build the table
+        # mdc_codes = mdc_codes.to_frame()
+        # mdc_codes = mdc_codes.merge(drg_low.to_frame(), left_index=True, right_index=True)
+        # mdc_codes = mdc_codes.merge(drg_high.to_frame(), left_index=True, right_index=True)
+        #
+        # return mdc_codes
 
-        """create a drg to mdc mapping"""
-        drg_low = mdc['MS-DRG(low)']
-        drg_high = mdc['MS-DRG(high)']
-        mdc_codes = mdc['MDC']
-        # build the table
-        mdc_codes = mdc_codes.to_frame()
-        mdc_codes = mdc_codes.merge(drg_low.to_frame(), left_index=True, right_index=True)
-        mdc_codes = mdc_codes.merge(drg_high.to_frame(), left_index=True, right_index=True)
-
-        return mdc_codes
 
     # def map_ipps_drg_codes_to_mdc(self, ipps_data):
     #     """
@@ -115,4 +117,4 @@ class DRGtoMDC:
 
     def add_mdc_codes_to_ipps(self, ipps_data):
         mdc_codes = self.get_mdc_code_data()
-        ipps_data["MDC"] = [[code[0] for code in mdc_codes.values if drg_code >= code[1] and drg_code <= code[2]][0] for drg_code in ipps_data.DRG_Code.values]
+        ipps_data["MDC"] = [[code[0] for code in mdc_codes.values if code[1] <= drg_code <= code[2]][0] for drg_code in ipps_data.DRG_Code.values]

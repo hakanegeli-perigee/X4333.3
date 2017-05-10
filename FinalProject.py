@@ -36,10 +36,15 @@ def main():
     print("Search Results:\n{}\n".format(mdc_codes_and_regions_search))
 
     # this is how to get unique values for a specific column
-    print("Unique Regions (inc nan):\n{}\n".format(mdc_codes_and_regions.Region.unique()))
+    print("Unique Regions (inc NaN):\n{}\n".format(mdc_codes_and_regions.Region.unique()))
 
     # this is how to get unique not null values for a specific column
-    print("Unique Regions:\n{}\n".format(mdc_codes_and_regions.Region[pd.isnull(mdc_codes_and_regions.Region) == False].unique()))
+    print("Unique Regions V1:\n{}\n".format(mdc_codes_and_regions.Region[pd.isnull(mdc_codes_and_regions.Region) == False].unique()))
+    # or
+    print("Unique Regions V2:\n{}\n".format(mdc_codes_and_regions.Region[mdc_codes_and_regions.Region.notnull()].unique()))
+
+    # this is how you can set a value to columns with Null/NaN. It does not modify the source data!!!
+    print("Unique Regions (nan is set to UNK):\n{}\n".format(mdc_codes_and_regions.Region.fillna("UNK").unique()))
 
     print("done")
 

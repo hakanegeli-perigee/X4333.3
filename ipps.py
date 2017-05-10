@@ -51,7 +51,7 @@ class IppsData:
         zipcode_data = self.__get_zip_code_data()
         data = self.__add_zip_code_data_to_ipps(data, zipcode_data)
         del(data["Zip_Code"])
-        del (data["State_Abbr"])
+        del(data["State_Abbr"])
         self._data = data
 
     def __load_ipps_data(self):

@@ -46,9 +46,13 @@ class IppsData:
         
         :return: None
         """
-        ipps_data = self.__load_ipps_data()
+        data = self.__load_ipps_data()
+        data["DRG_Code"] = [int(drg_definition.split(" - ", 1)[0]) for drg_definition in data.DRG_Definition.values]
         zipcode_data = self.__get_zip_code_data()
-        self._data = self.__add_zip_code_data_to_ipps(ipps_data, zipcode_data)
+        data = self.__add_zip_code_data_to_ipps(data, zipcode_data)
+        del(data["Zip_Code"])
+        del (data["State_Abbr"])
+        self._data = data
 
     def __load_ipps_data(self):
         """

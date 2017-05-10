@@ -1,5 +1,5 @@
 from ipps import IppsData
-
+from DRGtoMDC import DRGtoMDC
 
 def main():
     """
@@ -15,15 +15,12 @@ def main():
     # .data property returns a pandas DataFrame
     ipps_data = ipps.data
 
-    # since it's a dataframe all dataframe methods and properties can be used on the .data
-    # ex. get the column names
-    print(ipps_data.columns)
+    drg_mdc = DRGtoMDC()
+    drg_mdc.add_mdc_codes_to_ipps(ipps_data)
 
-    # ex2. get the columns you are interested using a list
-    print(ipps_data[["DRG_Definition", "Provider_Name"]].head(10))
-
-    # this is temporary, just to visualize the merged data set
+    # ipps data now has region, urban and MDC fields added
     ipps_data.to_csv("IPPS_Provider_Data_Merged.csv")
+    print("done")
 
 
 if __name__ == "__main__":

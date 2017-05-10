@@ -35,6 +35,10 @@ def main():
     mdc_codes_and_regions_search = mdc_codes_and_regions[(mdc_codes_and_regions["MDC"] == 23) & (mdc_codes_and_regions["Region"] == "WEST") & (mdc_codes_and_regions["Average_Total_Payments"] > 8000)]
     print("Search Results:\n{}\n".format(mdc_codes_and_regions_search))
 
+    values_as_np_ndarray = mdc_codes_and_regions_search.values
+    print(type(values_as_np_ndarray))
+    print("Search Results:\n{}\n".format(values_as_np_ndarray))
+
     # this is how to get unique values for a specific column
     print("Unique Regions (inc NaN):\n{}\n".format(mdc_codes_and_regions.Region.unique()))
 
